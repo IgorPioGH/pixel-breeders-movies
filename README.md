@@ -24,6 +24,7 @@ página com todos os filmes avaliados.
     - [x] paginação ("Carregar mais")
     - [x] filtro por gênero e ano
     - [x] dockerização
+    - [x] cache
 
 ## Pré-requisitos
 
