@@ -1,12 +1,14 @@
 from flask import Blueprint, request, jsonify
 import requests
 
+from extensions import cache
 from services.tmdb import search_movies, get_movie_details, get_genres
 
 movies_bp = Blueprint("movies", __name__, url_prefix="/api/movies")
 
 
 @movies_bp.route("/search", methods=["GET"])
+@cache.cached(timeout=600, query_string=True)
 def search():
     query = request.args.get("query", "").strip()
     page = request.args.get("page", 1, type=int)
@@ -28,6 +30,7 @@ def search():
 
 
 @movies_bp.route("/genres", methods=["GET"])
+@cache.cached(timeout=3600)
 def genres():
     try:
         data = get_genres()
@@ -37,6 +40,7 @@ def genres():
 
 
 @movies_bp.route("/<int:movie_id>", methods=["GET"])
+@cache.cached(timeout=3600)
 def details(movie_id):
     try:
         data = get_movie_details(movie_id)
